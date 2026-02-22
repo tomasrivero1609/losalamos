@@ -19,8 +19,18 @@ export function HeroTypewriter() {
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
   const [showCursor, setShowCursor] = useState(true);
+  const [reduceMotion, setReduceMotion] = useState(false);
 
   useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduceMotion(mq.matches);
+    const handler = () => setReduceMotion(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion) return;
     const phrase = PHRASES[phraseIndex];
     if (!phrase) return;
 
@@ -46,12 +56,17 @@ export function HeroTypewriter() {
       setPhraseIndex((i) => (i + 1) % PHRASES.length);
     }, PAUSE_BETWEEN_PHRASES);
     return () => clearTimeout(t);
-  }, [phraseIndex, displayText, isDeleting]);
+  }, [reduceMotion, phraseIndex, displayText, isDeleting]);
 
   useEffect(() => {
+    if (reduceMotion) return;
     const id = setInterval(() => setShowCursor((c) => !c), 530);
     return () => clearInterval(id);
-  }, []);
+  }, [reduceMotion]);
+
+  useEffect(() => {
+    if (reduceMotion) setDisplayText(PHRASES[0] ?? "");
+  }, [reduceMotion]);
 
   return (
     <p
@@ -60,15 +75,17 @@ export function HeroTypewriter() {
       aria-atomic="true"
     >
       <span className="inline">{displayText}</span>
-      <span
-        className={`inline-block w-0.5 align-middle bg-white transition-opacity duration-75 ${
-          showCursor ? "opacity-100" : "opacity-0"
-        }`}
-        style={{ height: "1.1em", marginLeft: "2px" }}
-        aria-hidden
-      >
-        |
-      </span>
+      {!reduceMotion && (
+        <span
+          className={`inline-block w-0.5 align-middle bg-white transition-opacity duration-75 ${
+            showCursor ? "opacity-100" : "opacity-0"
+          }`}
+          style={{ height: "1.1em", marginLeft: "2px" }}
+          aria-hidden
+        >
+          |
+        </span>
+      )}
     </p>
   );
 }

@@ -31,9 +31,20 @@ export function MarcasCarousel({ items }: MarcasCarouselProps) {
   const dragStartTranslate = useRef(0);
   const setWidth = useRef(0);
   const rafId = useRef<number>(0);
+  const reduceMotion = useRef(false);
 
   const applyTransform = useCallback((x: number) => {
     if (trackRef.current) trackRef.current.style.transform = `translate3d(${x}px, 0, 0)`;
+  }, []);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    reduceMotion.current = mq.matches;
+    const handler = () => {
+      reduceMotion.current = mq.matches;
+    };
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
   }, []);
 
   useEffect(() => {
@@ -41,7 +52,7 @@ export function MarcasCarousel({ items }: MarcasCarouselProps) {
     setWidth.current = getSetWidth(items.length);
 
     const tick = () => {
-      if (!paused.current) {
+      if (!paused.current && !reduceMotion.current) {
         translateX.current -= SPEED;
         if (translateX.current <= -setWidth.current) {
           translateX.current += setWidth.current;

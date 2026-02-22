@@ -32,6 +32,12 @@ export default async function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen antialiased`}
       >
+        <a
+          href="#productos-destacados"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-20 focus:z-50 focus:rounded-lg focus:bg-[var(--brand)] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[var(--brand)]"
+        >
+          Saltar al contenido
+        </a>
         <Header />
         {children}
         <FloatingWhatsApp lines={whatsappLines} />

@@ -44,7 +44,7 @@ export function FloatingWhatsApp({ lines }: FloatingWhatsAppProps) {
               href={whatsappUrl(line.number)}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-800 transition hover:bg-zinc-50"
+              className="flex cursor-pointer items-center gap-3 px-4 py-3 text-left text-sm font-medium text-zinc-800 transition hover:bg-zinc-50 focus:outline-none focus-visible:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--brand)]"
               onClick={() => setOpen(false)}
             >
               <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white">

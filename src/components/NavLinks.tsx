@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import type { Category } from "@/types/directus";
 
 export interface SocialLinks {
@@ -21,9 +21,24 @@ export function NavLinks({ categories, socialLinks }: NavLinksProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const linkClass =
-    "text-white font-medium transition hover:text-white/90 hover:underline underline-offset-4";
+    "cursor-pointer text-white font-medium transition hover:text-white/90 hover:underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--brand)]";
 
-  const redesItemClass = "block px-4 py-2 text-sm text-zinc-700 transition hover:bg-zinc-50";
+  const redesItemClass =
+    "block cursor-pointer px-4 py-2 text-sm text-zinc-700 transition hover:bg-zinc-50 focus:outline-none focus-visible:bg-zinc-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--brand)]";
+
+  const closeAll = useCallback(() => {
+    setCategoriesOpen(false);
+    setRedesOpen(false);
+    setMobileOpen(false);
+  }, []);
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") closeAll();
+    }
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [closeAll]);
   const firstLetterClass = "text-lg font-semibold tracking-tight";
 
   const redesDropdown = (
@@ -93,7 +108,7 @@ export function NavLinks({ categories, socialLinks }: NavLinksProps) {
               </p>
               <Link
                 href="/productos"
-                className="block px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50"
+                className="block cursor-pointer px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 focus-visible:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--brand)]"
                 onClick={() => setCategoriesOpen(false)}
               >
                 Todos los productos
@@ -102,7 +117,7 @@ export function NavLinks({ categories, socialLinks }: NavLinksProps) {
                 <Link
                   key={cat.id}
                   href={`/productos?categoria=${cat.slug}`}
-                  className="block px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50"
+                  className="block cursor-pointer px-4 py-2 text-sm text-zinc-700 hover:bg-zinc-50 focus-visible:bg-zinc-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--brand)]"
                   onClick={() => setCategoriesOpen(false)}
                 >
                   {cat.name}
@@ -184,13 +199,13 @@ export function NavLinks({ categories, socialLinks }: NavLinksProps) {
             </div>
           )}
         </div>
-        <button
-          type="button"
-          onClick={() => setMobileOpen((v) => !v)}
-          className="rounded p-2 text-white hover:bg-white/10 hover:text-white"
-          aria-expanded={mobileOpen}
-          aria-label="Abrir menú"
-        >
+<button
+        type="button"
+        onClick={() => setMobileOpen((v) => !v)}
+        className="cursor-pointer rounded p-2 text-white hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--brand)]"
+        aria-expanded={mobileOpen}
+        aria-label="Abrir menú"
+      >
           {mobileOpen ? (
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -209,7 +224,7 @@ export function NavLinks({ categories, socialLinks }: NavLinksProps) {
           <p className="mb-2 text-xs font-medium uppercase tracking-wide text-zinc-500">Categorías</p>
           <Link
             href="/productos"
-            className="block py-2 text-zinc-700 hover:text-zinc-900"
+            className="block cursor-pointer py-2 text-zinc-700 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--brand)] focus-visible:rounded"
             onClick={() => setMobileOpen(false)}
           >
             Todos los productos
@@ -218,7 +233,7 @@ export function NavLinks({ categories, socialLinks }: NavLinksProps) {
             <Link
               key={cat.id}
               href={`/productos?categoria=${cat.slug}`}
-              className="block py-2 text-zinc-700 hover:text-zinc-900"
+              className="block cursor-pointer py-2 text-zinc-700 hover:text-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--brand)] focus-visible:rounded"
               onClick={() => setMobileOpen(false)}
             >
               {cat.name}

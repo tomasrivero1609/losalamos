@@ -23,7 +23,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
 }
 
 @keyframes marquee {
@@ -37,6 +37,13 @@ body {
 
 .animate-marquee {
   animation: marquee 35s linear infinite;
+}
+
+/* Respetar preferencia de reducir movimiento (accesibilidad) */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }
 
 /* Brillo del nombre del producto al hacer hover en la card */
